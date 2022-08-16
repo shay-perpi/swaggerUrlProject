@@ -1,33 +1,20 @@
-from flask import Flask, request
-from flasgger import Swagger, LazyString, LazyJSONEncoder
-from flasgger import swag_from
+from flask import Flask
+from flask_restx import Api, Resource
 
-app = Flask(__name__)
-# Press the green button in the gutter to run the script.
+flask_app = Flask(__name__)
+app = Api(app=flask_app)
 
-app.json_encoder = LazyJSONEncoder
+name_space = app.namespace('main', description='Main APIs')
 
-swagger_template = dict(
-    info={
-        'title': LazyString(lambda: 'My first Swagger UI document'),
-        'version': LazyString(lambda: '0.1'),
-        'description': LazyString(
-            lambda: 'This document depicts a      sample Swagger UI document and implements Hello World functionality '
-                    'after executing GET.'),
-    },
-    host=LazyString(lambda: request.host)
-)
-swagger_config = {
-    "headers": [],
-    "specs": [
-        {
-            "endpoint": 'hello_world',
-            "route": '/hello_world.json',
-            "rule_filter": lambda rule: True,
-            "model_filter": lambda tag: True,
+
+@name_space.route("/")
+class MainClass(Resource):
+    def get(self):
+        return {
+            "status": "Got new data"
         }
-    ],
-    "static_url_path": "/flasgger_static",
-    "swagger_ui": True,
-    "specs_route": "/apidocs/"
-}
+
+    def post(self):
+        return {
+            "status": "Posted new data"
+        }

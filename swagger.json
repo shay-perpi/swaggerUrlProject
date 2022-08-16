@@ -1,0 +1,161 @@
+openapi: 3.0.0
+
+info:
+  title: Swagger Test API
+  description: UI Run test for Automation Team
+  termsOfService: http://google.co.il/
+
+  contact:
+    email: shayperp@rafael.co.il
+
+  license:
+    name: By Shay perpinial
+    url: http://azure.com
+  version: 1.0.0
+
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+
+servers:
+  - url: http:/server.to.checkTest
+    description: Test_server
+
+  - url: http://{localhost}:{port}/test_name/v1
+    description: provide ports for run on your local machine
+    variables:
+      hostname:
+        default: localhost
+      port:
+        enum:
+            - '1234'
+            - '12345'
+        default: '1234'
+
+tags:
+  - name: Test
+    description: Here we Run the test ./ test name
+    externalDocs:
+      description: More Info / Guide
+      url : http://someURLIfNeed.com/
+
+  - name: func2
+    description: func 2 tag
+
+
+paths:
+  / tests:
+      summary: test to Execute
+      description: chose test to run
+
+      get:
+        tags:
+          - Test
+        summary: run first test / should be test name
+        description: run the test on Post method
+        operationId: postTest
+        parameters:
+          - name: addParams
+            in: query
+            schema:
+              type : string
+              default:
+            required: true
+        responses:
+          '200':
+            description: Successfuly run the test all
+            content:
+              application/json:
+                schema:
+                  type: object
+                  description : some description
+                  properties :
+                    testID:
+                      type: number
+                      description: unique ID of the test
+                    testName:
+                      type: string
+                      description: name of the test
+                    testDuration:
+                      type: string
+
+      post:
+        tags:
+          - Test
+        summary: Test to run
+        description: description of this spesific test
+       # operationid: add test as post
+        requestBody:
+          description: the new test add
+          required: True
+          content:
+            appliction/json:
+              schema:
+                 type : string
+        responses:
+          '200':
+            description: Successfuly run the test all
+            content:
+              application/json:
+                schema:
+                  type: object
+                  description : some description
+                  properties :
+                    testID:
+                      type: number
+                      description: unique ID of the test
+                    testName:
+                      type: string
+                      description: name of the test
+                    testDuration:
+                      type: string
+
+                  required:
+                    - testID
+
+                example:
+                  testID: 1
+                  testName: testname
+                  testDuration: Automation
+
+  /tests/{testId}:
+    summary: opertaion on the test
+    description: Contain the list of opraions applied on tests
+    get:
+      tags:
+        - test
+        summary: Get a spacific course
+        description:  Returns the test details
+        oprationId:   getTest
+        parameters:
+          - name: testId
+          in: path
+          description: The unique id
+          required : true
+          schema :
+            type: string
+        responses:
+          '200':
+            description: Successfuly run the test all
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Test'
+
+
+
+components:
+  schemas:
+    Test:
+      type: object
+      description : some description
+      properties :
+        testID:
+          type: number
+          description: unique ID of the test
+        testName:
+          type: string
+          description: name of the test
+        testDuration:
+          type: string
+
